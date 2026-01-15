@@ -1,0 +1,36 @@
+<header class="main-header">
+  <img src="mountain.png" alt="Logo" class="header-logo">
+  <h1>My year resolutions</h1>
+
+  <div class="auth-section">
+    @if (user$ | async; as user) {
+      <div class="user-menu-container">
+        <button class="user-trigger" (click)="toggleMenu()">
+          @if (user.photoURL) {
+            <img [src]="user.photoURL" [alt]="user.displayName" class="user-avatar" referrerpolicy="no-referrer">
+          } @else {
+            <div class="user-avatar-placeholder">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+          }
+          <span class="user-name">{{ user.displayName || user.email }}</span>
+          <span class="material-symbols-outlined dropdown-icon" [class.open]="menuOpen()">expand_more</span>
+        </button>
+
+        @if (menuOpen()) {
+          <div class="user-dropdown">
+            <button class="dropdown-item" (click)="logout()">
+              <span class="material-symbols-outlined">logout</span>
+              Cerrar sesión
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <button class="btn-login" (click)="login()">
+        <span class="material-symbols-outlined">login</span>
+        Iniciar sesión
+      </button>
+    }
+  </div>
+</header>

@@ -1,0 +1,261 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      @if (editMode()) {
+        <h3>Editar Propósito</h3>
+      } @else {
+        <h3>{{ viewMode() ? resolution.name : 'Nuevo Propósito' }}</h3>
+      }
+      <button class="close-btn" type="button" (click)="onClose()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </header>
+
+    @if (viewMode() && !editMode()) {
+      <!-- Modo Vista -->
+      <div class="view-content">
+        @if (resolution.description) {
+          <p class="view-description">{{ resolution.description }}</p>
+        }
+        
+        <div class="view-dates">
+          <span><strong>Inicio:</strong> {{ resolution.startDate }}</span>
+          @if (resolution.endDate) {
+            <span><strong>Fin previsto:</strong> {{ resolution.endDate }}</span>
+          }
+        </div>
+
+        <div class="tasks-section">
+          <h4>Tareas</h4>
+          @if (tasks$ | async; as tasks) {
+            @if (tasks.length === 0) {
+              <p class="no-tasks">Este propósito no tiene tareas definidas.</p>
+            } @else {
+              <ul class="tasks-list">
+                @for (task of tasks; track task.id) {
+                  <li class="task-item" [class.completed]="task.completed">
+                    <label class="task-checkbox" [class.disabled]="isResolutionCompleted()">
+                      <input 
+                        type="checkbox" 
+                        [checked]="task.completed" 
+                        [disabled]="isResolutionCompleted()"
+                        (change)="toggleTaskCompleted(task)">
+                      <span class="checkmark"></span>
+                      <div class="task-info">
+                        <span class="task-description">{{ task.description }}</span>
+                        <span class="task-date" [class.overdue]="isOverdue(task)">{{ task.dueDate ? 'Fecha límite: ' + (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                      </div>
+                    </label>
+                  </li>
+                }
+              </ul>
+            }
+          }
+        </div>
+      </div>
+
+      <footer class="modal-footer view-footer">
+        <div class="footer-left">
+          @if (!isResolutionCompleted()) {
+            <button 
+              type="button" 
+              class="btn-complete-resolution" 
+              [class.disabled]="!canComplete()"
+              (click)="onComplete()"
+              [title]="canComplete() ? 'Completar propósito' : 'Completa todas las tareas primero'">
+              <span class="material-symbols-outlined">task_alt</span>
+              Completar
+            </button>
+          }
+        </div>
+        <div class="footer-right">
+          <button type="button" class="btn-secondary" (click)="onClose()">Cerrar</button>
+          @if (!isResolutionCompleted()) {
+            <button type="button" class="btn-primary" (click)="enterEditMode()">
+              <span class="material-symbols-outlined">edit</span>
+              Editar
+            </button>
+          }
+        </div>
+      </footer>
+    } @else if (editMode()) {
+      <!-- Modo Edición -->
+      <form (ngSubmit)="onUpdate()" #editForm="ngForm">
+        <div class="form-group">
+          <label for="name">Nombre del propósito</label>
+          <input type="text" id="name" name="name" [(ngModel)]="resolution.name" required placeholder="Ej. Aprender Angular">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descripción</label>
+          <textarea id="description" name="description" [(ngModel)]="resolution.description" rows="3" placeholder="¿Por qué es importante para ti?"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Fecha de inicio</label>
+            <input type="date" id="startDate" name="startDate" [(ngModel)]="resolution.startDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="endDate">Fecha de fin previsto</label>
+            <input type="date" id="endDate" name="endDate" [(ngModel)]="resolution.endDate">
+          </div>
+        </div>
+
+        <!-- Tareas existentes -->
+        <div class="tasks-section">
+          <h4>Tareas existentes</h4>
+          @if (tasks$ | async; as tasks) {
+            @if (tasks.length === 0) {
+              <p class="no-tasks">Este propósito no tiene tareas.</p>
+            } @else {
+              <ul class="tasks-list editable">
+                @for (task of tasks; track task.id) {
+                  <li class="task-item" [class.completed]="task.completed">
+                    <label class="task-checkbox">
+                      <input 
+                        type="checkbox" 
+                        [checked]="task.completed" 
+                        (change)="toggleTaskCompleted(task)">
+                      <div class="task-info">
+                        <span class="task-description">{{ task.description }}</span>
+                        <span class="task-date" [class.overdue]="isOverdue(task)">{{ task.dueDate ? 'Fecha límite: ' + (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                      </div>
+                    </label>
+                    <button type="button" class="btn-remove-task" (click)="deleteTask(task)" title="Eliminar tarea">
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          }
+        </div>
+
+        <!-- Añadir nuevas tareas -->
+        <div class="tasks-section">
+          <h4>Añadir nuevas tareas</h4>
+          <div class="add-task-row">
+            <input 
+              type="text" 
+              placeholder="Descripción de la tarea" 
+              [value]="newTaskDescription()"
+              (input)="newTaskDescription.set($any($event.target).value)"
+              (keydown.enter)="$event.preventDefault(); addTask()">
+            <input 
+              type="date" 
+              [value]="newTaskDueDate()"
+              (input)="newTaskDueDate.set($any($event.target).value)"
+              [min]="getMinDate()"
+              [max]="getMaxDate()"
+              class="hidden-date-input">
+            <button type="button" class="btn-date-picker" (click)="openDatePicker($event)" [class.active]="!!newTaskDueDate()" title="Añadir fecha límite">
+              <span class="material-symbols-outlined">calendar_month</span>
+            </button>
+            <button type="button" class="btn-add-task" (click)="addTask()">
+              <span class="material-symbols-outlined">add</span>
+              Añadir
+            </button>
+          </div>
+          @if (pendingTasks().length > 0) {
+            <ul class="pending-tasks-list">
+              @for (task of pendingTasks(); track $index) {
+                <li class="pending-task-item">
+                  <span class="material-symbols-outlined task-icon">check_circle</span>
+                  <div class="task-info">
+                    <span class="task-text">{{ task.description }}</span>
+                    <span class="task-date">{{ task.dueDate ? 'Fecha límite: ' + (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                  </div>
+                  <button type="button" class="btn-remove-task" (click)="removeTask($index)">
+                    <span class="material-symbols-outlined">close</span>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <footer class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="!editForm.form.valid">Guardar cambios</button>
+        </footer>
+      </form>
+    } @else {
+      <!-- Modo Creación -->
+      <form (ngSubmit)="onSave()" #resolutionForm="ngForm">
+        <div class="form-group">
+          <label for="name">Nombre del propósito</label>
+          <input type="text" id="name" name="name" [(ngModel)]="resolution.name" required placeholder="Ej. Aprender Angular">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descripción</label>
+          <textarea id="description" name="description" [(ngModel)]="resolution.description" rows="3" placeholder="¿Por qué es importante para ti?"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Fecha de inicio</label>
+            <input type="date" id="startDate" name="startDate" [(ngModel)]="resolution.startDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="endDate">Fecha de fin previsto</label>
+            <input type="date" id="endDate" name="endDate" [(ngModel)]="resolution.endDate">
+          </div>
+        </div>
+
+        <!-- Sección de tareas -->
+        <div class="tasks-section">
+          <h4>Tareas</h4>
+          <p class="tasks-hint">Añade tareas para medir el progreso de tu propósito</p>
+          
+          <div class="add-task-row">
+            <input 
+              type="text" 
+              placeholder="Descripción de la tarea" 
+              [value]="newTaskDescription()"
+              (input)="newTaskDescription.set($any($event.target).value)"
+              (keydown.enter)="$event.preventDefault(); addTask()">
+            <input 
+              type="date" 
+              [value]="newTaskDueDate()"
+              (input)="newTaskDueDate.set($any($event.target).value)"
+              [min]="getMinDate()"
+              [max]="getMaxDate()"
+              class="hidden-date-input">
+            <button type="button" class="btn-date-picker" (click)="openDatePicker($event)" [class.active]="!!newTaskDueDate()" title="Añadir fecha límite">
+              <span class="material-symbols-outlined">calendar_month</span>
+            </button>
+            <button type="button" class="btn-add-task" (click)="addTask()">
+              <span class="material-symbols-outlined">add</span>
+              Añadir tarea
+            </button>
+          </div>
+          @if (pendingTasks().length > 0) {
+            <ul class="pending-tasks-list">
+              @for (task of pendingTasks(); track $index) {
+                <li class="pending-task-item">
+                  <span class="material-symbols-outlined task-icon">check_circle</span>
+                  <div class="task-info">
+                    <span class="task-text">{{ task.description }}</span>
+                    <span class="task-date">{{ task.dueDate ? 'Fecha límite: ' + (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                  </div>
+                  <button type="button" class="btn-remove-task" (click)="removeTask($index)">
+                    <span class="material-symbols-outlined">close</span>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <footer class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="onClose()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="!resolutionForm.form.valid">Guardar Propósito</button>
+        </footer>
+      </form>
+    }
+  </div>
+</div>

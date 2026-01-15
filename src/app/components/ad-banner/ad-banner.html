@@ -1,0 +1,17 @@
+<div class="ad-slot" aria-label="Publicidad">
+  @if (isBrowser && adSlot && adsenseClient) {
+    <ins class="adsbygoogle"
+         style="display:block"
+         [attr.data-ad-client]="adsenseClient"
+         [attr.data-ad-slot]="adSlot"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+  } @else {
+    <!-- Placeholder visible hasta que integres el script del proveedor -->
+    <div class="ad-placeholder">
+      <span>Espacio para anuncio</span>
+      <small>970×90 (desktop) · 728×90 · 320×50 (mobile)</small>
+    </div>
+  }
+</div>
+

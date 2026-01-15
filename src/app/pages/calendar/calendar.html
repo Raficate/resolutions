@@ -1,0 +1,79 @@
+<section class="calendar-container">
+  <h2>Calendario de Propósitos {{ today.getFullYear() }}</h2>
+
+  @if (user$ | async) {
+    <div class="gantt-wrapper">
+      <!-- Header con meses -->
+      <div class="gantt-header">
+        <div class="gantt-label-header">Propósito</div>
+        <div class="gantt-timeline-header">
+          @for (month of months(); track month.name) {
+            <div class="month-column" [style.flex]="month.days">
+              {{ month.name }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Contenido del Gantt -->
+      <div class="gantt-body">
+        @if (resolutions$ | async; as resolutions) {
+          @if (resolutions.length === 0) {
+            <div class="no-resolutions">
+              <p>No hay propósitos para mostrar.</p>
+              <p>Crea propósitos desde la página Principal para verlos aquí.</p>
+            </div>
+          } @else {
+            @for (resolution of resolutions; track resolution.id) {
+              @let bar = calculateBar(resolution);
+              <div class="gantt-row">
+                <div class="gantt-label" [class.completed]="resolution.completed" [title]="resolution.name">
+                  {{ resolution.name }}
+                </div>
+                <div class="gantt-timeline">
+                  <!-- Grid de meses -->
+                  <div class="month-grid">
+                    @for (month of months(); track month.name) {
+                      <div class="month-cell" [style.flex]="month.days"></div>
+                    }
+                  </div>
+                  
+                  <!-- Barra del propósito -->
+                  <div 
+                    class="gantt-bar" 
+                    [style.left.%]="bar.left" 
+                    [style.width.%]="bar.width"
+                    [style.background-color]="bar.color"
+                    [title]="resolution.name + ': ' + resolution.startDate + ' - ' + (resolution.endDate || 'Sin fecha fin')">
+                  </div>
+
+                  <!-- Línea del día actual -->
+                  <div class="today-line" [style.left.%]="todayPosition()"></div>
+
+                  @if (completionPosition(resolution) !== null; as completedPos) {
+                    <div class="completion-line" [style.left.%]="completedPos"></div>
+                    <div 
+                      class="completion-dot"
+                      [style.left.%]="completedPos"
+                      [title]="'Completado el ' + (completedDate(resolution) | date:'dd MMM yyyy')">
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          }
+        }
+      </div>
+
+      <!-- Leyenda -->
+      <div class="gantt-legend">
+        <div class="legend-item">
+          <div class="legend-line today"></div>
+          <span>Hoy ({{ today | date:'dd MMM yyyy' }})</span>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <p class="login-message">Inicia sesión para ver el calendario de tus propósitos.</p>
+  }
+</section>

@@ -1,0 +1,40 @@
+<section class="tasks-container">
+  <h2>Todas las tareas</h2>
+
+  @if (user$ | async; as user) {
+    @if (allTasks$ | async; as tasks) {
+      @if (tasks.length === 0) {
+        <div class="empty-state">
+          <span class="material-symbols-outlined">task</span>
+          <p>No tienes tareas creadas todavía.</p>
+          <small>Crea propósitos y añádeles tareas para verlas aquí.</small>
+        </div>
+      } @else {
+        <ul class="tasks-list">
+          @for (task of tasks; track task.id) {
+            <li class="task-item" [class.completed]="task.completed" [class.overdue]="isOverdue(task)">
+              <label class="task-checkbox">
+                <input 
+                  type="checkbox" 
+                  [checked]="task.completed" 
+                  (change)="toggleTask(task)">
+                <span class="checkmark">
+                  <span class="material-symbols-outlined">{{ task.completed ? 'check_circle' : 'radio_button_unchecked' }}</span>
+                </span>
+                <div class="task-content">
+                  <span class="task-description">{{ task.description }}</span>
+                  <div class="task-meta">
+                    <span class="task-resolution">{{ task.resolutionName }}</span>
+                    <span class="task-date">{{ task.dueDate ? (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                  </div>
+                </div>
+              </label>
+            </li>
+          }
+        </ul>
+      }
+    }
+  } @else {
+    <p class="login-message">Inicia sesión para ver tus tareas.</p>
+  }
+</section>

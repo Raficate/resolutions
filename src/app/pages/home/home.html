@@ -1,0 +1,76 @@
+<section class="home-container">
+ 
+  @if (user$ | async; as user) {
+    @if (resolutionsWithProgress$ | async; as resolutions) {
+      @if (resolutions.length === 0) {
+        <p>Aquí comenzaremos a listar tus propósitos de año nuevo.</p>
+      } @else {
+        <div class="resolutions-list" cdkDropList (cdkDropListDropped)="drop($event, resolutions)">
+          @for (res of resolutions; track res.id) {
+            <div class="resolution-card" cdkDrag [class.completed]="res.completed" (click)="openViewModal(res)">
+              <div class="drag-handle" cdkDragHandle>
+                <span class="material-symbols-outlined">drag_indicator</span>
+              </div>
+              <div class="card-content">
+                <div class="card-header">
+                  <div class="title-row">
+                    @if (res.completed) {
+                      <span class="completed-badge">
+                        <span class="material-symbols-outlined">check_circle</span>
+                      </span>
+                    }
+                    <h3>{{ res.name }}</h3>
+                  </div>
+                  <div class="card-actions">
+                    @if (!res.completed) {
+                      <button class="btn-delete" (click)="deleteResolution(res.id!, $event)" aria-label="Eliminar">
+                        <span class="material-symbols-outlined">delete</span>
+                      </button>
+                    }
+                  </div>
+                </div>
+                <p>{{ res.description }}</p>
+                <div class="card-footer">
+                  <div class="dates">
+                    <span>Inicio: {{ res.startDate }}</span>
+                    @if (res.endDate) {
+                      <span> - Fin estimado: {{ res.endDate }}</span>
+                    }
+                    @if (res.completed && res.completedAt) {
+                      <span> - Finalizado: {{ formatDate(res.completedAt) }}</span>
+                    }
+                  </div>
+                  @if (res.totalTasks > 0 && !res.completed) {
+                    <div class="progress-section">
+                      <div class="progress-bar">
+                        <div class="progress-fill" [class]="getProgressColorClass(res.progress)" [style.width.%]="res.progress"></div>
+                      </div>
+                      <span class="progress-text" [class]="getProgressColorClass(res.progress)">{{ res.progress }}%</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+
+    <button class="fab-button" (click)="openModal()" aria-label="Añadir propósito">
+      <span class="material-symbols-outlined">add_2</span>
+    </button>
+  } @else {
+    <p class="login-message">Inicia sesión para ver y crear tus propósitos de año nuevo.</p>
+  }
+
+  @if (showModal()) {
+    <app-modal-add-resolution 
+      [viewMode]="viewMode()"
+      [resolutionData]="selectedResolution()"
+      (close)="closeModal()" 
+      (save)="saveResolution($event)"
+      (update)="updateResolution($event)"
+      (complete)="completeResolutionById($event)">
+    </app-modal-add-resolution>
+  }
+</section>

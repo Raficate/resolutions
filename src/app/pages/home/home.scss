@@ -1,0 +1,285 @@
+.home-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+
+  h2 {
+    color: #444;
+    margin-bottom: 2rem;
+  }
+}
+
+.resolutions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.resolution-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s, opacity 0.2s;
+  display: flex;
+  align-items: stretch;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  // CDK Drag styles
+  &.cdk-drag-preview {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    opacity: 0.95;
+  }
+
+  &.cdk-drag-placeholder {
+    opacity: 0.3;
+    background: #e0e0e0;
+    border: 2px dashed #999;
+  }
+
+  &.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    cursor: grab;
+    color: #ccc;
+    background: #fafafa;
+    border-radius: 12px 0 0 12px;
+    transition: color 0.2s, background-color 0.2s;
+
+    &:hover {
+      color: #666;
+      background: #f0f0f0;
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    .material-symbols-outlined {
+      font-size: 1.25rem;
+    }
+  }
+
+  .card-content {
+    flex: 1;
+    padding: 1.5rem;
+    min-width: 0;
+  }
+
+  &.completed {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: #86efac;
+
+    .drag-handle {
+      background: rgba(134, 239, 172, 0.3);
+    }
+
+    h3 {
+      color: #166534;
+    }
+
+    p {
+      color: #4ade80;
+    }
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .completed-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    .material-symbols-outlined {
+      font-size: 1.25rem;
+      color: #22c55e;
+    }
+  }
+
+  h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2rem;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// CDK Drop list styles
+.resolutions-list.cdk-drop-list-dragging .resolution-card:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+  .card-actions {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .btn-delete {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+
+    .material-symbols-outlined {
+      font-size: 1.25rem;
+      color: #999;
+    }
+
+    &:hover {
+      background-color: #fee2e2;
+
+      .material-symbols-outlined {
+        color: #dc2626;
+      }
+    }
+  }
+
+  p {
+    color: #666;
+    font-size: 0.95rem;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .card-footer {
+    border-top: 1px solid #f8f8f8;
+    padding-top: 0.75rem;
+  }
+
+  .dates {
+    font-size: 0.85rem;
+    color: #888;
+  }
+
+  .progress-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      overflow: hidden;
+
+      .progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.3s ease, background-color 0.3s ease;
+
+        &.progress-red {
+          background-color: #dc2626;
+        }
+
+        &.progress-orange {
+          background-color: #f97316;
+        }
+
+        &.progress-yellow {
+          background-color: #eab308;
+        }
+
+        &.progress-green {
+          background-color: #22c55e;
+        }
+      }
+    }
+
+    .progress-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      min-width: 40px;
+      text-align: right;
+
+      &.progress-red {
+        color: #dc2626;
+      }
+
+      &.progress-orange {
+        color: #f97316;
+      }
+
+      &.progress-yellow {
+        color: #ca8a04;
+      }
+
+      &.progress-green {
+        color: #22c55e;
+      }
+    }
+  }
+
+.login-message {
+  text-align: center;
+  color: #666;
+  padding: 3rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  font-size: 1.1rem;
+}
+
+.fab-button {
+  position: fixed;
+  bottom: 7rem; // Por encima del banner de publicidad
+  right: 2rem;
+  width: 84px;
+  height: 84px;
+  border-radius: 24px; // Estilo más moderno que círculo perfecto
+  background-color: #E88528;
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(232, 133, 40, 0.3);
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+  z-index: 1000; // Por encima del banner
+
+  &:hover {
+    background-color: #d4751e;
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(232, 133, 40, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  .material-symbols-outlined {
+    font-size: 36px;
+    font-variation-settings: 'wght' 500;
+  }
+}

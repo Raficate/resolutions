@@ -1,0 +1,53 @@
+## Chat
+- Responde siempre en español.
+- Sé conciso; usa listas y bloques de código solo cuando aporten claridad.
+- Pide aclaraciones solo si bloquea el progreso.
+
+## Edit
+- No cambies la indentación existente de los archivos.
+- Mantén Angular standalone components (sin `NgModule`).
+- Sigue el estilo de Angular 20; usa `provideRouter`, `provideClientHydration`, señales y `provideZonelessChangeDetection`.
+- Mantén SSR con `@angular/ssr`; en server usa `bootstrapApplication(App, config, context)`.
+- Usa SCSS para estilos.
+
+## Proyecto (Resolutions - Angular 20 + SSR)
+- Tech stack: Angular 20, Router, RxJS 7.8, SSR con `@angular/ssr`, Express 5, TypeScript ~5.8.
+- Entradas principales:
+  - Cliente: `src/main.ts`
+  - Servidor: `src/main.server.ts`
+  - Config app: `src/app/app.config.ts`
+  - Config server: `src/app/app.config.server.ts`
+  - Server Node: `src/server.ts`
+- Rutas: definidas en `src/app/app.routes.ts` y `app.routes.server.ts`.
+- Estilos globales: `src/styles.scss`; componentes con `styleUrl` SCSS.
+
+## Convenciones
+- TypeScript estricto, tipados explícitos en API públicas.
+- Nombres y estructuras siguiendo guía oficial Angular.
+- Commits: Conventional Commits (feat, fix, refactor, docs, test, chore).
+- Pruebas: Karma/Jasmine cuando haya lógica de negocio.
+
+## Seguridad y calidad
+- Validar inputs y manejar errores; no exponer información sensible en mensajes de error.
+- Evitar dependencias innecesarias; preferir utilidades estándar de Angular/RxJS.
+- Mantener SSR-friendly (sin usar APIs del DOM directamente en server).
+
+## Contexto del producto (rellenar y actualizar)
+- Objetivo: Seguimiento de propósitos de año nuevo (metas, progreso, recordatorios).
+- UI/UX:
+  - Header común (`components/header`) siempre visible con el título "My year resolutions" justificado a la izquierda.
+  - El header incluye el icono "sports_score" de Material Symbols antes del título.
+  - Layout: Sidebar a la izquierda (`components/sidebar`) y área de contenido a la derecha.
+  - Sidebar: Contiene navegación con "Principal" vinculando a `home`.
+  - UI Elements: Uso de Floating Action Button (FAB) en la esquina inferior derecha para acciones principales (ej. añadir propósitos).
+- Componentes: Modales centrados para entrada de datos (`modal-add-resolution`).
+- Datos: Los propósitos incluyen nombre, descripción, fecha de inicio y fecha de fin previsto.
+  - Colores: 
+    - Header fondo blanco (`#ffffff`).
+    - Azul oscuro principal: `#0B3E66` (texto sidebar, elementos destacados).
+    - Naranja acento: `#E88528` (botones de acción, FAB).
+  - Tipografía: TODA la aplicación debe usar la fuente "Google Sans".
+  - Página inicial por defecto: `pages/home`.
+- Roles de usuario: [pendiente]
+- Entidades principales: Propósito, Hito, Progreso, Recordatorio. [pendiente detallar]
+- Reglas de negocio: [pendiente]
