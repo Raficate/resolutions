@@ -3,6 +3,7 @@
   "github": {
     "silent": true
   },
+  "cleanUrls": true,
   "builds": [
     {
       "src": "api/ssr.ts",
