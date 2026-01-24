@@ -28,6 +28,7 @@
               @let bar = calculateBar(resolution);
               <div class="gantt-row">
                 <div class="gantt-label" [class.completed]="resolution.completed" [title]="resolution.name">
+                  <span class="color-indicator" [style.background-color]="resolution.color || '#1a73e8'"></span>
                   {{ resolution.name }}
                 </div>
                 <div class="gantt-timeline">
@@ -44,7 +45,7 @@
                     [style.left.%]="bar.left" 
                     [style.width.%]="bar.width"
                     [style.background-color]="bar.color"
-                    [title]="resolution.name + ': ' + resolution.startDate + ' - ' + (resolution.endDate || 'Sin fecha fin')">
+                    [title]="resolution.name + ': ' + formatDateString(resolution.startDate) + ' - ' + formatDateString(resolution.endDate)">
                   </div>
 
                   <!-- Línea del día actual -->

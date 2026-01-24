@@ -74,15 +74,11 @@ export class Calendar {
     const left = (startDiff / totalDays) * 100;
     const width = ((endDiff - startDiff + 1) / totalDays) * 100;
     
-    // Colores variados para las barras
-    const colors = ['#1a73e8', '#34a853', '#ea4335', '#fbbc04', '#9334e6', '#00acc1'];
-    const colorIndex = resolution.name.length % colors.length;
-    
     return {
       resolution,
       left: Math.max(0, left),
       width: Math.min(100 - left, width),
-      color: colors[colorIndex]
+      color: resolution.color || '#1a73e8' // Usar el color del propósito o el azul por defecto
     };
   }
 
@@ -110,5 +106,12 @@ export class Calendar {
 
     // Asegurar que la marca quede dentro del rango visible del año
     return Math.min(Math.max(position, 0), 100);
+  }
+
+  // Formatear fecha de YYYY-MM-DD a DD/MM/YYYY
+  formatDateString(dateStr: string | null | undefined): string {
+    if (!dateStr) return 'Sin fecha fin';
+    const [year, month, day] = dateStr.split('-');
+    return `${day}/${month}/${year}`;
   }
 }

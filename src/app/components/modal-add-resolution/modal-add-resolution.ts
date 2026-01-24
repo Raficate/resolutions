@@ -16,6 +16,7 @@ export interface ResolutionFormData {
   description: string;
   startDate: string;
   endDate: string;
+  color: string;
   tasks: TaskWithDate[];
 }
 
@@ -25,6 +26,7 @@ export interface ResolutionUpdateData {
   description: string;
   startDate: string;
   endDate: string;
+  color: string;
   newTasks: TaskWithDate[];
 }
 
@@ -50,11 +52,24 @@ export class ModalAddResolution implements OnInit {
   // Estado interno para edición
   editMode = signal(false);
 
+  // Paleta de colores disponibles
+  availableColors = [
+    '#1a73e8', // Azul
+    '#34a853', // Verde
+    '#ea4335', // Rojo
+    '#fbbc04', // Amarillo
+    '#9334e6', // Púrpura
+    '#00acc1', // Cian
+    '#e91e63', // Rosa
+    '#ff5722', // Naranja
+  ];
+
   resolution = {
     name: '',
     description: '',
     startDate: '',
-    endDate: ''
+    endDate: '',
+    color: '#1a73e8' // Color por defecto
   };
 
   // Tareas locales para modo creación/edición
@@ -76,7 +91,8 @@ export class ModalAddResolution implements OnInit {
         name: data.name,
         description: data.description,
         startDate: data.startDate,
-        endDate: data.endDate || ''
+        endDate: data.endDate || '',
+        color: data.color || '#1a73e8'
       };
       if (data.id) {
         this.tasks$ = this.taskService.getTasksByResolution$(data.id).pipe(
@@ -217,5 +233,9 @@ export class ModalAddResolution implements OnInit {
     const dueDate = new Date(task.dueDate);
     dueDate.setHours(0, 0, 0, 0);
     return dueDate < today;
+  }
+
+  selectColor(color: string) {
+    this.resolution.color = color;
   }
 }

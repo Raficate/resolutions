@@ -25,6 +25,7 @@ export interface Resolution {
   description: string;
   startDate: string;
   endDate: string | null;
+  color: string;
   completed: boolean;
   completedAt?: Timestamp;
   order: number;
@@ -109,7 +110,7 @@ export class ResolutionService {
     await batch.commit();
   }
 
-  async updateResolution(id: string, data: Partial<Pick<Resolution, 'name' | 'description' | 'startDate' | 'endDate'>>): Promise<void> {
+  async updateResolution(id: string, data: Partial<Pick<Resolution, 'name' | 'description' | 'startDate' | 'endDate' | 'color'>>): Promise<void> {
     if (!isPlatformBrowser(this.platformId)) return;
 
     const docRef = doc(this.firestore, this.collectionName, id);

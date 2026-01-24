@@ -1,5 +1,5 @@
 import { Component, signal, inject } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { combineLatest, map, of, switchMap, catchError, startWith } from 'rxjs';
 import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Timestamp } from '@angular/fire/firestore';
@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ModalAddResolution, AsyncPipe, CdkDropList, CdkDrag, CdkDragHandle],
+  imports: [ModalAddResolution, AsyncPipe, DatePipe, CdkDropList, CdkDrag, CdkDragHandle],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -93,7 +93,8 @@ export class Home {
         name: resolutionData.name,
         description: resolutionData.description,
         startDate: resolutionData.startDate,
-        endDate: resolutionData.endDate || null
+        endDate: resolutionData.endDate || null,
+        color: resolutionData.color
       });
       
       if (newTasks.length > 0) {

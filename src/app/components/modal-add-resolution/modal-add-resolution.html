@@ -18,11 +18,16 @@
           <p class="view-description">{{ resolution.description }}</p>
         }
         
-        <div class="view-dates">
-          <span><strong>Inicio:</strong> {{ resolution.startDate }}</span>
-          @if (resolution.endDate) {
-            <span><strong>Fin previsto:</strong> {{ resolution.endDate }}</span>
-          }
+        <div class="view-meta">
+          <div class="view-color">
+            <span class="color-badge" [style.background-color]="resolution.color"></span>
+          </div>
+          <div class="view-dates">
+            <span><strong>Inicio:</strong> {{ resolution.startDate | date:'dd/MM/yyyy' }}</span>
+            @if (resolution.endDate) {
+              <span><strong>Fin previsto:</strong> {{ resolution.endDate | date:'dd/MM/yyyy' }}</span>
+            }
+          </div>
         </div>
 
         <div class="tasks-section">
@@ -100,6 +105,22 @@
           <div class="form-group">
             <label for="endDate">Fecha de fin previsto</label>
             <input type="date" id="endDate" name="endDate" [(ngModel)]="resolution.endDate">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Color identificativo</label>
+          <div class="color-picker">
+            @for (color of availableColors; track color) {
+              <button 
+                type="button" 
+                class="color-option" 
+                [style.background-color]="color"
+                [class.selected]="resolution.color === color"
+                (click)="selectColor(color)"
+                [title]="color">
+              </button>
+            }
           </div>
         </div>
 
@@ -203,6 +224,22 @@
           <div class="form-group">
             <label for="endDate">Fecha de fin previsto</label>
             <input type="date" id="endDate" name="endDate" [(ngModel)]="resolution.endDate">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Color identificativo</label>
+          <div class="color-picker">
+            @for (color of availableColors; track color) {
+              <button 
+                type="button" 
+                class="color-option" 
+                [style.background-color]="color"
+                [class.selected]="resolution.color === color"
+                (click)="selectColor(color)"
+                [title]="color">
+              </button>
+            }
           </div>
         </div>
 

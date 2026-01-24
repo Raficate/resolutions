@@ -8,7 +8,7 @@
         <div class="resolutions-list" cdkDropList (cdkDropListDropped)="drop($event, resolutions)">
           @for (res of resolutions; track res.id) {
             <div class="resolution-card" cdkDrag [class.completed]="res.completed" (click)="openViewModal(res)">
-              <div class="drag-handle" cdkDragHandle>
+              <div class="drag-handle" cdkDragHandle [style.background-color]="res.color || '#1a73e8'">
                 <span class="material-symbols-outlined">drag_indicator</span>
               </div>
               <div class="card-content">
@@ -32,9 +32,9 @@
                 <p>{{ res.description }}</p>
                 <div class="card-footer">
                   <div class="dates">
-                    <span>Inicio: {{ res.startDate }}</span>
+                    <span>Inicio: {{ res.startDate | date:'dd/MM/yyyy' }}</span>
                     @if (res.endDate) {
-                      <span> - Fin estimado: {{ res.endDate }}</span>
+                      <span> - Fin estimado: {{ res.endDate | date:'dd/MM/yyyy' }}</span>
                     }
                     @if (res.completed && res.completedAt) {
                       <span> - Finalizado: {{ formatDate(res.completedAt) }}</span>

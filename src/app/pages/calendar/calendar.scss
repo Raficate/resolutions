@@ -80,6 +80,14 @@
   text-overflow: ellipsis;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+
+  .color-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
 
   &.completed {
     background: #e9f8ef;
