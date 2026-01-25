@@ -3,6 +3,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { combineLatest, map, of, switchMap, catchError, startWith } from 'rxjs';
 import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Timestamp } from '@angular/fire/firestore';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { ModalAddResolution, ResolutionFormData, ResolutionUpdateData } from '../../components/modal-add-resolution/modal-add-resolution';
 import { ResolutionService, Resolution, ResolutionWithProgress } from '../../services/resolution.service';
 import { TaskService } from '../../services/task.service';
@@ -11,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ModalAddResolution, AsyncPipe, DatePipe, CdkDropList, CdkDrag, CdkDragHandle],
+  imports: [ModalAddResolution, AsyncPipe, DatePipe, CdkDropList, CdkDrag, CdkDragHandle, TranslocoModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

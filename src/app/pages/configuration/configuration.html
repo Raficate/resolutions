@@ -1,0 +1,66 @@
+<section class="settings-container">
+  <h2>{{ 'settings.title' | transloco }}</h2>
+
+  <div class="settings-section">
+    <h3>{{ 'settings.appearance' | transloco }}</h3>
+
+    <!-- Idioma -->
+    <div class="setting-item">
+      <div class="setting-info">
+        <span class="material-symbols-outlined">translate</span>
+        <div class="setting-text">
+          <label>{{ 'settings.language' | transloco }}</label>
+          <small>{{ 'settings.languageDescription' | transloco }}</small>
+        </div>
+      </div>
+      <div class="setting-control">
+        <div class="toggle-group">
+          @for (lang of availableLangs; track lang) {
+            <button 
+              type="button"
+              [class.active]="activeLang() === lang"
+              (click)="changeLang(lang)">
+              {{ getLangLabel(lang) }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Tema -->
+    <div class="setting-item">
+      <div class="setting-info">
+        <span class="material-symbols-outlined">palette</span>
+        <div class="setting-text">
+          <label>{{ 'settings.theme' | transloco }}</label>
+          <small>{{ 'settings.themeDescription' | transloco }}</small>
+        </div>
+      </div>
+      <div class="setting-control">
+        <div class="toggle-group">
+          @for (theme of themes; track theme) {
+            <button 
+              type="button"
+              [class.active]="activeTheme() === theme"
+              (click)="changeTheme(theme)">
+              @switch (theme) {
+                @case ('light') {
+                  <span class="material-symbols-outlined">light_mode</span>
+                  {{ 'settings.themeLight' | transloco }}
+                }
+                @case ('dark') {
+                  <span class="material-symbols-outlined">dark_mode</span>
+                  {{ 'settings.themeDark' | transloco }}
+                }
+                @case ('system') {
+                  <span class="material-symbols-outlined">contrast</span>
+                  {{ 'settings.themeSystem' | transloco }}
+                }
+              }
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

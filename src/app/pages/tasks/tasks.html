@@ -1,40 +1,95 @@
 <section class="tasks-container">
-  <h2>Todas las tareas</h2>
+  <div class="tasks-header">
+    <h2>{{ 'tasks.title' | transloco }}</h2>
+    <button class="btn-toggle-view" (click)="toggleView()" [title]="viewMode() === 'list' ? ('tasks.calendarView' | transloco) : ('tasks.listView' | transloco)">
+      <span class="material-symbols-outlined">{{ viewMode() === 'list' ? 'calendar_view_month' : 'view_agenda' }}</span>
+    </button>
+  </div>
 
   @if (user$ | async; as user) {
     @if (allTasks$ | async; as tasks) {
-      @if (tasks.length === 0) {
-        <div class="empty-state">
-          <span class="material-symbols-outlined">task</span>
-          <p>No tienes tareas creadas todavía.</p>
-          <small>Crea propósitos y añádeles tareas para verlas aquí.</small>
-        </div>
-      } @else {
-        <ul class="tasks-list">
-          @for (task of tasks; track task.id) {
-            <li class="task-item" [class.completed]="task.completed" [class.overdue]="isOverdue(task)">
-              <label class="task-checkbox">
-                <input 
-                  type="checkbox" 
-                  [checked]="task.completed" 
-                  (change)="toggleTask(task)">
-                <span class="checkmark">
-                  <span class="material-symbols-outlined">{{ task.completed ? 'check_circle' : 'radio_button_unchecked' }}</span>
-                </span>
-                <div class="task-content">
-                  <span class="task-description">{{ task.description }}</span>
-                  <div class="task-meta">
-                    <span class="task-resolution">{{ task.resolutionName }}</span>
-                    <span class="task-date">{{ task.dueDate ? (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+      @if (viewMode() === 'list') {
+        <!-- Vista Lista -->
+        @if (tasks.length === 0) {
+          <div class="empty-state">
+            <span class="material-symbols-outlined">task</span>
+            <p>{{ 'tasks.empty' | transloco }}</p>
+            <small>{{ 'tasks.emptyHint' | transloco }}</small>
+          </div>
+        } @else {
+          <ul class="tasks-list">
+            @for (task of tasks; track task.id) {
+              <li class="task-item" [class.completed]="task.completed" [class.overdue]="isOverdue(task)">
+                <label class="task-checkbox">
+                  <input 
+                    type="checkbox" 
+                    [checked]="task.completed" 
+                    (change)="toggleTask(task)">
+                  <span class="checkmark">
+                    <span class="material-symbols-outlined">{{ task.completed ? 'check_circle' : 'radio_button_unchecked' }}</span>
+                  </span>
+                  <div class="task-content">
+                    <span class="task-description">{{ task.description }}</span>
+                    <div class="task-meta">
+                      <span class="task-resolution">{{ task.resolutionName }}</span>
+                      <span class="task-date">{{ task.dueDate ? (task.dueDate | date:'dd/MM/yyyy') : ('tasks.noDueDate' | transloco) }}</span>
+                    </div>
                   </div>
+                </label>
+              </li>
+            }
+          </ul>
+        }
+      } @else {
+        <!-- Vista Calendario -->
+        <div class="calendar-view">
+          <div class="calendar-nav">
+            <button class="btn-today" (click)="goToToday()">{{ 'tasks.today' | transloco }}</button>
+            <div class="month-nav">
+              <button class="btn-nav" (click)="previousMonth()">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <span class="current-month">{{ currentMonthName() }}</span>
+              <button class="btn-nav" (click)="nextMonth()">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="calendar-grid">
+            <div class="calendar-weekdays">
+              @for (day of weekDays(); track day) {
+                <div class="weekday">{{ day }}</div>
+              }
+            </div>
+            <div class="calendar-days">
+              @for (day of generateCalendarDays(tasks); track day.date.getTime()) {
+                <div class="calendar-day" 
+                     [class.other-month]="!day.isCurrentMonth"
+                     [class.today]="day.isToday">
+                  <span class="day-number">{{ day.dayNumber }}</span>
+                  @if (day.tasks.length > 0) {
+                    <div class="day-tasks">
+                      @for (task of day.tasks; track task.id) {
+                        <div class="day-task" 
+                             [class.completed]="task.completed"
+                             [class.overdue]="isOverdue(task)"
+                             [title]="task.description + ' - ' + task.resolutionName"
+                             (click)="toggleTask(task); $event.stopPropagation()">
+                          <span class="task-dot" [style.background-color]="task.resolutionColor"></span>
+                          <span class="task-text">{{ task.description }}</span>
+                        </div>
+                      }
+                    </div>
+                  }
                 </div>
-              </label>
-            </li>
-          }
-        </ul>
+              }
+            </div>
+          </div>
+        </div>
       }
     }
   } @else {
-    <p class="login-message">Inicia sesión para ver tus tareas.</p>
+    <p class="login-message">{{ 'tasks.loginRequired' | transloco }}</p>
   }
 </section>

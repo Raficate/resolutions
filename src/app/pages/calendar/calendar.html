@@ -1,11 +1,11 @@
 <section class="calendar-container">
-  <h2>Calendario de Propósitos {{ today.getFullYear() }}</h2>
+  <h2>{{ 'calendar.title' | transloco }} {{ today.getFullYear() }}</h2>
 
   @if (user$ | async) {
     <div class="gantt-wrapper">
       <!-- Header con meses -->
       <div class="gantt-header">
-        <div class="gantt-label-header">Propósito</div>
+        <div class="gantt-label-header">{{ 'calendar.resolution' | transloco }}</div>
         <div class="gantt-timeline-header">
           @for (month of months(); track month.name) {
             <div class="month-column" [style.flex]="month.days">
@@ -20,8 +20,8 @@
         @if (resolutions$ | async; as resolutions) {
           @if (resolutions.length === 0) {
             <div class="no-resolutions">
-              <p>No hay propósitos para mostrar.</p>
-              <p>Crea propósitos desde la página Principal para verlos aquí.</p>
+              <p>{{ 'calendar.empty' | transloco }}</p>
+              <p>{{ 'calendar.emptyHint' | transloco }}</p>
             </div>
           } @else {
             @for (resolution of resolutions; track resolution.id) {
@@ -70,11 +70,11 @@
       <div class="gantt-legend">
         <div class="legend-item">
           <div class="legend-line today"></div>
-          <span>Hoy ({{ today | date:'dd MMM yyyy' }})</span>
+          <span>{{ 'calendar.today' | transloco }} ({{ today | date:'dd MMM yyyy' }})</span>
         </div>
       </div>
     </div>
   } @else {
-    <p class="login-message">Inicia sesión para ver el calendario de tus propósitos.</p>
+    <p class="login-message">{{ 'calendar.loginRequired' | transloco }}</p>
   }
 </section>

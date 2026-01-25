@@ -3,19 +3,25 @@
     <li>
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         <span class="material-symbols-outlined">view_list</span>
-        Principal
+        {{ 'sidebar.home' | transloco }}
       </a>
     </li>
     <li>
       <a routerLink="/tasks" routerLinkActive="active">
         <span class="material-symbols-outlined">check_circle</span>
-        Todas las tareas
+        {{ 'sidebar.tasks' | transloco }}
       </a>
     </li>
     <li>
       <a routerLink="/calendar" routerLinkActive="active">
         <span class="material-symbols-outlined">calendar_month</span>
-        Calendario
+        {{ 'sidebar.calendar' | transloco }}
+      </a>
+    </li>
+    <li>
+      <a routerLink="/settings" routerLinkActive="active">
+        <span class="material-symbols-outlined">settings</span>
+        {{ 'sidebar.settings' | transloco }}
       </a>
     </li>
   </ul>

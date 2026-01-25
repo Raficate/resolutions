@@ -1,10 +1,11 @@
 import { Component, inject, signal, HostListener } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
+import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, TranslocoModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

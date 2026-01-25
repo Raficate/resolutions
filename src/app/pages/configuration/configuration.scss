@@ -1,0 +1,132 @@
+.settings-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+
+  h2 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.75rem;
+    color: var(--text-primary);
+  }
+}
+
+.settings-section {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+
+  h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+}
+
+.setting-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .material-symbols-outlined {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+  }
+}
+
+.setting-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  label {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  small {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+}
+
+.setting-control {
+  flex-shrink: 0;
+}
+
+.toggle-group {
+  display: flex;
+  background: var(--toggle-bg);
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    .material-symbols-outlined {
+      font-size: 1.125rem;
+    }
+
+    &:hover {
+      background: var(--toggle-hover);
+    }
+
+    &.active {
+      background: var(--toggle-active-bg);
+      color: var(--toggle-active-color);
+      font-weight: 500;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .settings-container {
+    padding: 1rem;
+  }
+
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .toggle-group {
+    width: 100%;
+
+    button {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+}

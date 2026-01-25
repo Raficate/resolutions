@@ -1,10 +1,10 @@
-<div class="modal-overlay" (click)="onClose()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<div class="modal-overlay" (click)="onClose()" *transloco="let t">
+  <div class="modal-content" #modalContent (click)="$event.stopPropagation()">
     <header class="modal-header">
       @if (editMode()) {
-        <h3>Editar Propósito</h3>
+        <h3>{{ t('modal.editResolution') }}</h3>
       } @else {
-        <h3>{{ viewMode() ? resolution.name : 'Nuevo Propósito' }}</h3>
+        <h3>{{ viewMode() ? resolution.name : t('modal.newResolution') }}</h3>
       }
       <button class="close-btn" type="button" (click)="onClose()">
         <span class="material-symbols-outlined">close</span>
@@ -23,18 +23,18 @@
             <span class="color-badge" [style.background-color]="resolution.color"></span>
           </div>
           <div class="view-dates">
-            <span><strong>Inicio:</strong> {{ resolution.startDate | date:'dd/MM/yyyy' }}</span>
+            <span><strong>{{ t('modal.startDate') }}:</strong> {{ resolution.startDate | date:'dd/MM/yyyy' }}</span>
             @if (resolution.endDate) {
-              <span><strong>Fin previsto:</strong> {{ resolution.endDate | date:'dd/MM/yyyy' }}</span>
+              <span><strong>{{ t('modal.endDate') }}:</strong> {{ resolution.endDate | date:'dd/MM/yyyy' }}</span>
             }
           </div>
         </div>
 
         <div class="tasks-section">
-          <h4>Tareas</h4>
+          <h4>{{ t('modal.tasks') }}</h4>
           @if (tasks$ | async; as tasks) {
             @if (tasks.length === 0) {
-              <p class="no-tasks">Este propósito no tiene tareas definidas.</p>
+              <p class="no-tasks">{{ t('modal.noTasks') }}</p>
             } @else {
               <ul class="tasks-list">
                 @for (task of tasks; track task.id) {
@@ -48,7 +48,7 @@
                       <span class="checkmark"></span>
                       <div class="task-info">
                         <span class="task-description">{{ task.description }}</span>
-                        <span class="task-date" [class.overdue]="isOverdue(task)">{{ task.dueDate ? 'Fecha límite: ' + (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                        <span class="task-date" [class.overdue]="isOverdue(task)">{{ task.dueDate ? t('modal.dueDate') + ': ' + (task.dueDate | date:'dd/MM/yyyy') : t('modal.noDueDate') }}</span>
                       </div>
                     </label>
                   </li>
@@ -67,18 +67,18 @@
               class="btn-complete-resolution" 
               [class.disabled]="!canComplete()"
               (click)="onComplete()"
-              [title]="canComplete() ? 'Completar propósito' : 'Completa todas las tareas primero'">
+              [title]="canComplete() ? t('modal.complete') : t('modal.completeAllFirst')">
               <span class="material-symbols-outlined">task_alt</span>
-              Completar
+              {{ t('modal.complete') }}
             </button>
           }
         </div>
         <div class="footer-right">
-          <button type="button" class="btn-secondary" (click)="onClose()">Cerrar</button>
+          <button type="button" class="btn-secondary" (click)="onClose()">{{ t('modal.close') }}</button>
           @if (!isResolutionCompleted()) {
             <button type="button" class="btn-primary" (click)="enterEditMode()">
               <span class="material-symbols-outlined">edit</span>
-              Editar
+              {{ t('modal.edit') }}
             </button>
           }
         </div>
@@ -87,29 +87,29 @@
       <!-- Modo Edición -->
       <form (ngSubmit)="onUpdate()" #editForm="ngForm">
         <div class="form-group">
-          <label for="name">Nombre del propósito</label>
-          <input type="text" id="name" name="name" [(ngModel)]="resolution.name" required placeholder="Ej. Aprender Angular">
+          <label for="name">{{ t('modal.name') }}</label>
+          <input type="text" id="name" name="name" [(ngModel)]="resolution.name" required [placeholder]="t('modal.namePlaceholder')">
         </div>
 
         <div class="form-group">
-          <label for="description">Descripción</label>
-          <textarea id="description" name="description" [(ngModel)]="resolution.description" rows="3" placeholder="¿Por qué es importante para ti?"></textarea>
+          <label for="description">{{ t('modal.description') }}</label>
+          <textarea id="description" name="description" [(ngModel)]="resolution.description" rows="3" [placeholder]="t('modal.descriptionPlaceholder')"></textarea>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="startDate">Fecha de inicio</label>
+            <label for="startDate">{{ t('modal.startDate') }}</label>
             <input type="date" id="startDate" name="startDate" [(ngModel)]="resolution.startDate" required>
           </div>
 
           <div class="form-group">
-            <label for="endDate">Fecha de fin previsto</label>
+            <label for="endDate">{{ t('modal.endDate') }}</label>
             <input type="date" id="endDate" name="endDate" [(ngModel)]="resolution.endDate">
           </div>
         </div>
 
         <div class="form-group">
-          <label>Color identificativo</label>
+          <label>{{ t('modal.color') }}</label>
           <div class="color-picker">
             @for (color of availableColors; track color) {
               <button 
@@ -126,10 +126,10 @@
 
         <!-- Tareas existentes -->
         <div class="tasks-section">
-          <h4>Tareas existentes</h4>
+          <h4>{{ t('modal.existingTasks') }}</h4>
           @if (tasks$ | async; as tasks) {
             @if (tasks.length === 0) {
-              <p class="no-tasks">Este propósito no tiene tareas.</p>
+              <p class="no-tasks">{{ t('modal.noTasksEdit') }}</p>
             } @else {
               <ul class="tasks-list editable">
                 @for (task of tasks; track task.id) {
@@ -141,10 +141,10 @@
                         (change)="toggleTaskCompleted(task)">
                       <div class="task-info">
                         <span class="task-description">{{ task.description }}</span>
-                        <span class="task-date" [class.overdue]="isOverdue(task)">{{ task.dueDate ? 'Fecha límite: ' + (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                        <span class="task-date" [class.overdue]="isOverdue(task)">{{ task.dueDate ? t('modal.dueDate') + ': ' + (task.dueDate | date:'dd/MM/yyyy') : t('modal.noDueDate') }}</span>
                       </div>
                     </label>
-                    <button type="button" class="btn-remove-task" (click)="deleteTask(task)" title="Eliminar tarea">
+                    <button type="button" class="btn-remove-task" (click)="deleteTask(task)" [title]="t('modal.delete')">
                       <span class="material-symbols-outlined">delete</span>
                     </button>
                   </li>
@@ -156,27 +156,29 @@
 
         <!-- Añadir nuevas tareas -->
         <div class="tasks-section">
-          <h4>Añadir nuevas tareas</h4>
+          <h4>{{ t('modal.addNewTasks') }}</h4>
           <div class="add-task-row">
             <input 
               type="text" 
-              placeholder="Descripción de la tarea" 
+              [placeholder]="t('modal.taskPlaceholder')" 
               [value]="newTaskDescription()"
               (input)="newTaskDescription.set($any($event.target).value)"
               (keydown.enter)="$event.preventDefault(); addTask()">
-            <input 
-              type="date" 
-              [value]="newTaskDueDate()"
-              (input)="newTaskDueDate.set($any($event.target).value)"
-              [min]="getMinDate()"
-              [max]="getMaxDate()"
-              class="hidden-date-input">
-            <button type="button" class="btn-date-picker" (click)="openDatePicker($event)" [class.active]="!!newTaskDueDate()" title="Añadir fecha límite">
-              <span class="material-symbols-outlined">calendar_month</span>
-            </button>
+            <div class="date-input-wrapper">
+              <span class="material-symbols-outlined date-icon">calendar_month</span>
+              <input 
+                type="date" 
+                [value]="newTaskDueDate()"
+                (input)="newTaskDueDate.set($any($event.target).value)"
+                (focus)="scrollToDateInput($event)"
+                [min]="getMinDate()"
+                [max]="getMaxDate()"
+                class="date-input"
+                [title]="t('modal.dueDate')">
+            </div>
             <button type="button" class="btn-add-task" (click)="addTask()">
               <span class="material-symbols-outlined">add</span>
-              Añadir
+              {{ t('modal.add') }}
             </button>
           </div>
           @if (pendingTasks().length > 0) {
@@ -186,7 +188,7 @@
                   <span class="material-symbols-outlined task-icon">check_circle</span>
                   <div class="task-info">
                     <span class="task-text">{{ task.description }}</span>
-                    <span class="task-date">{{ task.dueDate ? 'Fecha límite: ' + (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                    <span class="task-date">{{ task.dueDate ? t('modal.dueDate') + ': ' + (task.dueDate | date:'dd/MM/yyyy') : t('modal.noDueDate') }}</span>
                   </div>
                   <button type="button" class="btn-remove-task" (click)="removeTask($index)">
                     <span class="material-symbols-outlined">close</span>
@@ -198,37 +200,37 @@
         </div>
 
         <footer class="modal-footer">
-          <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancelar</button>
-          <button type="submit" class="btn-primary" [disabled]="!editForm.form.valid">Guardar cambios</button>
+          <button type="button" class="btn-secondary" (click)="cancelEdit()">{{ t('modal.cancel') }}</button>
+          <button type="submit" class="btn-primary" [disabled]="!editForm.form.valid">{{ t('modal.saveChanges') }}</button>
         </footer>
       </form>
     } @else {
       <!-- Modo Creación -->
       <form (ngSubmit)="onSave()" #resolutionForm="ngForm">
         <div class="form-group">
-          <label for="name">Nombre del propósito</label>
-          <input type="text" id="name" name="name" [(ngModel)]="resolution.name" required placeholder="Ej. Aprender Angular">
+          <label for="name">{{ t('modal.name') }}</label>
+          <input type="text" id="name" name="name" [(ngModel)]="resolution.name" required [placeholder]="t('modal.namePlaceholder')">
         </div>
 
         <div class="form-group">
-          <label for="description">Descripción</label>
-          <textarea id="description" name="description" [(ngModel)]="resolution.description" rows="3" placeholder="¿Por qué es importante para ti?"></textarea>
+          <label for="description">{{ t('modal.description') }}</label>
+          <textarea id="description" name="description" [(ngModel)]="resolution.description" rows="3" [placeholder]="t('modal.descriptionPlaceholder')"></textarea>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="startDate">Fecha de inicio</label>
+            <label for="startDate">{{ t('modal.startDate') }}</label>
             <input type="date" id="startDate" name="startDate" [(ngModel)]="resolution.startDate" required>
           </div>
 
           <div class="form-group">
-            <label for="endDate">Fecha de fin previsto</label>
+            <label for="endDate">{{ t('modal.endDate') }}</label>
             <input type="date" id="endDate" name="endDate" [(ngModel)]="resolution.endDate">
           </div>
         </div>
 
         <div class="form-group">
-          <label>Color identificativo</label>
+          <label>{{ t('modal.color') }}</label>
           <div class="color-picker">
             @for (color of availableColors; track color) {
               <button 
@@ -245,29 +247,31 @@
 
         <!-- Sección de tareas -->
         <div class="tasks-section">
-          <h4>Tareas</h4>
-          <p class="tasks-hint">Añade tareas para medir el progreso de tu propósito</p>
+          <h4>{{ t('modal.tasks') }}</h4>
+          <p class="tasks-hint">{{ t('modal.tasksHint') }}</p>
           
           <div class="add-task-row">
             <input 
               type="text" 
-              placeholder="Descripción de la tarea" 
+              [placeholder]="t('modal.taskPlaceholder')" 
               [value]="newTaskDescription()"
               (input)="newTaskDescription.set($any($event.target).value)"
               (keydown.enter)="$event.preventDefault(); addTask()">
-            <input 
-              type="date" 
-              [value]="newTaskDueDate()"
-              (input)="newTaskDueDate.set($any($event.target).value)"
-              [min]="getMinDate()"
-              [max]="getMaxDate()"
-              class="hidden-date-input">
-            <button type="button" class="btn-date-picker" (click)="openDatePicker($event)" [class.active]="!!newTaskDueDate()" title="Añadir fecha límite">
-              <span class="material-symbols-outlined">calendar_month</span>
-            </button>
+            <div class="date-input-wrapper">
+              <span class="material-symbols-outlined date-icon">calendar_month</span>
+              <input 
+                type="date" 
+                [value]="newTaskDueDate()"
+                (input)="newTaskDueDate.set($any($event.target).value)"
+                (focus)="scrollToDateInput($event)"
+                [min]="getMinDate()"
+                [max]="getMaxDate()"
+                class="date-input"
+                [title]="t('modal.dueDate')">
+            </div>
             <button type="button" class="btn-add-task" (click)="addTask()">
               <span class="material-symbols-outlined">add</span>
-              Añadir tarea
+              {{ t('modal.addTask') }}
             </button>
           </div>
           @if (pendingTasks().length > 0) {
@@ -277,7 +281,7 @@
                   <span class="material-symbols-outlined task-icon">check_circle</span>
                   <div class="task-info">
                     <span class="task-text">{{ task.description }}</span>
-                    <span class="task-date">{{ task.dueDate ? 'Fecha límite: ' + (task.dueDate | date:'dd/MM/yyyy') : 'Sin fecha límite' }}</span>
+                    <span class="task-date">{{ task.dueDate ? t('modal.dueDate') + ': ' + (task.dueDate | date:'dd/MM/yyyy') : t('modal.noDueDate') }}</span>
                   </div>
                   <button type="button" class="btn-remove-task" (click)="removeTask($index)">
                     <span class="material-symbols-outlined">close</span>
@@ -289,8 +293,8 @@
         </div>
 
         <footer class="modal-footer">
-          <button type="button" class="btn-secondary" (click)="onClose()">Cancelar</button>
-          <button type="submit" class="btn-primary" [disabled]="!resolutionForm.form.valid">Guardar Propósito</button>
+          <button type="button" class="btn-secondary" (click)="onClose()">{{ t('modal.cancel') }}</button>
+          <button type="submit" class="btn-primary" [disabled]="!resolutionForm.form.valid">{{ t('modal.save') }}</button>
         </footer>
       </form>
     }

@@ -1,9 +1,10 @@
 .sidebar {
   width: 250px;
   height: calc(100vh - 64px); // Ajustar según altura del header
-  background-color: #ffffff;
-  border-right: 1px solid #f0f0f0;
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
   padding: 1.5rem 0;
+  transition: background-color 0.3s, border-color 0.3s;
 
   ul {
     list-style: none;
@@ -19,28 +20,27 @@
         gap: 0.75rem;
         padding: 0.75rem 1.5rem;
         text-decoration: none;
-        color: #0B3E66;
+        color: var(--text-primary);
         font-size: 1rem;
         transition: background-color 0.2s, color 0.2s;
 
         &:hover {
-          background-color: #f0f5fa;
-          color: #0B3E66;
+          background-color: var(--sidebar-hover);
         }
 
         &.active {
-          background-color: #e0ecf5;
-          color: #0B3E66;
+          background-color: var(--sidebar-active);
+          color: var(--sidebar-active-text);
           font-weight: 600;
 
           .material-symbols-outlined {
-            color: #0B3E66;
+            color: var(--sidebar-active-text);
           }
         }
 
         .material-symbols-outlined {
           font-size: 1.25rem;
-          color: #0B3E66;
+          color: var(--text-secondary);
         }
       }
     }

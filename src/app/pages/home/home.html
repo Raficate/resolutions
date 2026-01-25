@@ -3,7 +3,7 @@
   @if (user$ | async; as user) {
     @if (resolutionsWithProgress$ | async; as resolutions) {
       @if (resolutions.length === 0) {
-        <p>Aquí comenzaremos a listar tus propósitos de año nuevo.</p>
+        <p>{{ 'home.empty' | transloco }}</p>
       } @else {
         <div class="resolutions-list" cdkDropList (cdkDropListDropped)="drop($event, resolutions)">
           @for (res of resolutions; track res.id) {
@@ -23,7 +23,7 @@
                   </div>
                   <div class="card-actions">
                     @if (!res.completed) {
-                      <button class="btn-delete" (click)="deleteResolution(res.id!, $event)" aria-label="Eliminar">
+                      <button class="btn-delete" (click)="deleteResolution(res.id!, $event)" [attr.aria-label]="'modal.delete' | transloco">
                         <span class="material-symbols-outlined">delete</span>
                       </button>
                     }
@@ -32,12 +32,12 @@
                 <p>{{ res.description }}</p>
                 <div class="card-footer">
                   <div class="dates">
-                    <span>Inicio: {{ res.startDate | date:'dd/MM/yyyy' }}</span>
+                    <span>{{ 'home.startDate' | transloco }}: {{ res.startDate | date:'dd/MM/yyyy' }}</span>
                     @if (res.endDate) {
-                      <span> - Fin estimado: {{ res.endDate | date:'dd/MM/yyyy' }}</span>
+                      <span> - {{ 'home.endDate' | transloco }}: {{ res.endDate | date:'dd/MM/yyyy' }}</span>
                     }
                     @if (res.completed && res.completedAt) {
-                      <span> - Finalizado: {{ formatDate(res.completedAt) }}</span>
+                      <span> - {{ 'home.completedAt' | transloco }}: {{ formatDate(res.completedAt) }}</span>
                     }
                   </div>
                   @if (res.totalTasks > 0 && !res.completed) {
@@ -56,11 +56,11 @@
       }
     }
 
-    <button class="fab-button" (click)="openModal()" aria-label="Añadir propósito">
+    <button class="fab-button" (click)="openModal()" [attr.aria-label]="'home.addResolution' | transloco">
       <span class="material-symbols-outlined">add_2</span>
     </button>
   } @else {
-    <p class="login-message">Inicia sesión para ver y crear tus propósitos de año nuevo.</p>
+    <p class="login-message">{{ 'home.loginRequired' | transloco }}</p>
   }
 
   @if (showModal()) {

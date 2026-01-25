@@ -3,9 +3,10 @@
   justify-content: flex-start;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #f0f0f0;
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
   gap: 0.75rem;
+  transition: background-color 0.3s, border-color 0.3s;
 
   .header-logo {
     width: 40px;
@@ -16,7 +17,7 @@
   h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #333;
+    color: var(--text-primary);
     flex: 1;
   }
 
@@ -37,14 +38,14 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background-color: #e0e0e0;
+      background-color: var(--toggle-bg);
       display: flex;
       align-items: center;
       justify-content: center;
 
       .material-symbols-outlined {
         font-size: 1.25rem;
-        color: #757575;
+        color: var(--text-secondary);
       }
     }
 
@@ -64,12 +65,12 @@
       transition: background-color 0.2s;
 
       &:hover {
-        background-color: #f5f5f5;
+        background-color: var(--toggle-hover);
       }
 
       .user-name {
         font-size: 0.875rem;
-        color: #555;
+        color: var(--text-secondary);
         max-width: 150px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -78,7 +79,7 @@
 
       .dropdown-icon {
         font-size: 1.25rem;
-        color: #666;
+        color: var(--text-secondary);
         transition: transform 0.2s;
 
         &.open {
@@ -92,9 +93,9 @@
       top: calc(100% + 8px);
       right: 0;
       min-width: 200px;
-      background: white;
+      background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--card-shadow);
       padding: 0.5rem;
       z-index: 100;
 
@@ -109,16 +110,16 @@
         background: transparent;
         cursor: pointer;
         font-size: 0.875rem;
-        color: #333;
+        color: var(--text-primary);
         transition: background-color 0.2s;
 
         .material-symbols-outlined {
           font-size: 1.25rem;
-          color: #666;
+          color: var(--text-secondary);
         }
 
         &:hover {
-          background-color: #f5f5f5;
+          background-color: var(--toggle-hover);
         }
       }
     }
@@ -133,12 +134,12 @@
       cursor: pointer;
       font-size: 0.875rem;
       transition: background-color 0.2s;
-      background-color: #4285f4;
-      color: white;
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-color);
 
       .material-symbols-outlined {
         font-size: 1.25rem;
-        color: white;
+        color: var(--btn-primary-color);
       }
 
       &:hover {

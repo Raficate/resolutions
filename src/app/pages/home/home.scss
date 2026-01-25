@@ -5,7 +5,7 @@
   position: relative;
 
   h2 {
-    color: #444;
+    color: var(--text-primary);
     margin-bottom: 2rem;
   }
 }
@@ -17,17 +17,17 @@
 }
 
 .resolution-card {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
-  border: 1px solid #f0f0f0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
   cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.2s, opacity 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s, opacity 0.2s, background-color 0.3s;
   display: flex;
   align-items: stretch;
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
   }
 
@@ -39,8 +39,8 @@
 
   &.cdk-drag-placeholder {
     opacity: 0.3;
-    background: #e0e0e0;
-    border: 2px dashed #999;
+    background: var(--toggle-bg);
+    border: 2px dashed var(--text-secondary);
   }
 
   &.cdk-drag-animating {
@@ -124,7 +124,7 @@
 
   h3 {
     margin: 0;
-    color: #333;
+    color: var(--text-primary);
     font-size: 1.2rem;
     flex: 1;
     white-space: nowrap;
@@ -153,7 +153,7 @@
 
     .material-symbols-outlined {
       font-size: 1.25rem;
-      color: #999;
+      color: var(--text-secondary);
     }
 
     &:hover {
@@ -166,19 +166,19 @@
   }
 
   p {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 0.95rem;
     margin: 0.5rem 0 1rem;
   }
 
   .card-footer {
-    border-top: 1px solid #f8f8f8;
+    border-top: 1px solid var(--border-color);
     padding-top: 0.75rem;
   }
 
   .dates {
     font-size: 0.85rem;
-    color: #888;
+    color: var(--text-secondary);
   }
 
   .progress-section {
@@ -190,7 +190,7 @@
     .progress-bar {
       flex: 1;
       height: 8px;
-      background: #f0f0f0;
+      background: var(--toggle-bg);
       border-radius: 4px;
       overflow: hidden;
 
@@ -243,9 +243,9 @@
 
 .login-message {
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
   padding: 3rem;
-  background: #f9fafb;
+  background: var(--bg-secondary);
   border-radius: 12px;
   font-size: 1.1rem;
 }

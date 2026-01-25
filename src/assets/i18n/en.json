@@ -1,0 +1,85 @@
+{
+  "header": {
+    "title": "My year resolutions",
+    "logout": "Log out",
+    "login": "Sign in",
+    "language": "Language"
+  },
+  "sidebar": {
+    "home": "Home",
+    "tasks": "All tasks",
+    "calendar": "Calendar",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "language": "Language",
+    "languageDescription": "Select the application language",
+    "theme": "Theme",
+    "themeDescription": "Select the application theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "home": {
+    "empty": "Here we will start listing your new year resolutions.",
+    "loginRequired": "Sign in to view and create your new year resolutions.",
+    "startDate": "Start",
+    "endDate": "Estimated end",
+    "completedAt": "Completed",
+    "addResolution": "Add resolution"
+  },
+  "tasks": {
+    "title": "All tasks",
+    "empty": "You don't have any tasks yet.",
+    "emptyHint": "Create resolutions and add tasks to see them here.",
+    "noDueDate": "No due date",
+    "loginRequired": "Sign in to view your tasks.",
+    "calendarView": "Calendar view",
+    "listView": "List view",
+    "today": "Today"
+  },
+  "calendar": {
+    "title": "Resolutions Calendar",
+    "empty": "No resolutions to display.",
+    "emptyHint": "Create resolutions from the Home page to see them here.",
+    "resolution": "Resolution",
+    "today": "Today",
+    "loginRequired": "Sign in to view your resolutions calendar."
+  },
+  "modal": {
+    "newResolution": "New Resolution",
+    "editResolution": "Edit Resolution",
+    "name": "Resolution name",
+    "namePlaceholder": "E.g. Learn Angular",
+    "description": "Description",
+    "descriptionPlaceholder": "Why is it important to you?",
+    "startDate": "Start date",
+    "endDate": "Estimated end date",
+    "color": "Identifying color",
+    "tasks": "Tasks",
+    "existingTasks": "Existing tasks",
+    "addNewTasks": "Add new tasks",
+    "tasksHint": "Add tasks to measure your resolution progress",
+    "taskPlaceholder": "Task description",
+    "addTask": "Add task",
+    "add": "Add",
+    "dueDate": "Due date",
+    "noDueDate": "No due date",
+    "noTasks": "This resolution has no tasks defined.",
+    "noTasksEdit": "This resolution has no tasks.",
+    "save": "Save Resolution",
+    "saveChanges": "Save changes",
+    "cancel": "Cancel",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "complete": "Complete",
+    "completeAllFirst": "Complete all tasks first"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English"
+  }
+}

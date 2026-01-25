@@ -1,6 +1,7 @@
-import { Component, output, input, signal, inject, OnInit } from '@angular/core';
+import { Component, output, input, signal, inject, OnInit, viewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { TranslocoModule } from '@jsverse/transloco';
 import { Resolution, Task } from '../../services/resolution.service';
 import { TaskService } from '../../services/task.service';
 import { Observable, of } from 'rxjs';
@@ -33,12 +34,14 @@ export interface ResolutionUpdateData {
 @Component({
   selector: 'app-modal-add-resolution',
   standalone: true,
-  imports: [FormsModule, AsyncPipe, DatePipe],
+  imports: [FormsModule, AsyncPipe, DatePipe, TranslocoModule],
   templateUrl: './modal-add-resolution.html',
   styleUrl: './modal-add-resolution.scss',
 })
 export class ModalAddResolution implements OnInit {
   private taskService = inject(TaskService);
+
+  modalContent = viewChild<ElementRef<HTMLElement>>('modalContent');
 
   close = output<void>();
   save = output<ResolutionFormData>();
@@ -183,20 +186,35 @@ export class ModalAddResolution implements OnInit {
     this.pendingTasks.update(tasks => tasks.filter((_, i) => i !== index));
   }
 
-  openDatePicker(event: Event) {
-    const target = event.target as HTMLElement;
-    const dateInput = target.closest('.add-task-row')?.querySelector('input[type="date"]') as HTMLInputElement;
-    if (dateInput) {
-      dateInput.showPicker();
-    }
-  }
-
   getMinDate(): string {
     return this.resolution.startDate || '';
   }
 
   getMaxDate(): string {
     return this.resolution.endDate || '';
+  }
+
+  scrollToDateInput(event: FocusEvent) {
+    const input = event.target as HTMLElement;
+    const modal = this.modalContent()?.nativeElement;
+    
+    if (modal && input) {
+      // Dar tiempo para que el DOM se actualice
+      setTimeout(() => {
+        // Calcular la posición del input relativa al modal
+        const inputRect = input.getBoundingClientRect();
+        const modalRect = modal.getBoundingClientRect();
+        
+        // Si el input está cerca del borde inferior del modal, hacer scroll
+        const spaceBelow = modalRect.bottom - inputRect.bottom;
+        const minSpace = 320; // Espacio necesario para el date picker
+        
+        if (spaceBelow < minSpace) {
+          const scrollAmount = minSpace - spaceBelow;
+          modal.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+        }
+      }, 50);
+    }
   }
 
   async toggleTaskCompleted(task: Task) {

@@ -1,6 +1,6 @@
 <header class="main-header">
   <img src="mountain.png" alt="Logo" class="header-logo">
-  <h1>My year resolutions</h1>
+  <h1>{{ 'header.title' | transloco }}</h1>
 
   <div class="auth-section">
     @if (user$ | async; as user) {
@@ -21,7 +21,7 @@
           <div class="user-dropdown">
             <button class="dropdown-item" (click)="logout()">
               <span class="material-symbols-outlined">logout</span>
-              Cerrar sesión
+              {{ 'header.logout' | transloco }}
             </button>
           </div>
         }
@@ -29,7 +29,7 @@
     } @else {
       <button class="btn-login" (click)="login()">
         <span class="material-symbols-outlined">login</span>
-        Iniciar sesión
+        {{ 'header.login' | transloco }}
       </button>
     }
   </div>

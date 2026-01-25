@@ -1,6 +1,7 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { ResolutionService, Resolution } from '../../services/resolution.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -13,7 +14,7 @@ interface GanttBar {
 
 @Component({
   selector: 'app-calendar',
-  imports: [AsyncPipe, DatePipe],
+  imports: [AsyncPipe, DatePipe, TranslocoModule],
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',
 })

@@ -10,15 +10,16 @@
 }
 
 .modal-content {
-  background: #fff;
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 20px;
   width: 90%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-  border: 1px solid #f0f0f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .modal-header {
@@ -37,20 +38,24 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #666;
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
 
     &:hover {
-      color: #000;
+      color: var(--text-primary);
     }
   }
+}
+
+[data-theme="dark"] .modal-header h3 {
+  color: #64b5f6;
 }
 
 // Modo Vista
 .view-content {
   .view-description {
-    color: #555;
+    color: var(--text-secondary);
     margin-bottom: 1rem;
     line-height: 1.5;
   }
@@ -61,7 +66,7 @@
     gap: 1rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .view-color {
@@ -77,8 +82,12 @@
   .view-dates {
     display: flex;
     gap: 2rem;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 0.9rem;
+
+    strong {
+      color: var(--text-primary);
+    }
   }
 }
 
@@ -86,22 +95,22 @@
 .tasks-section {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-color);
 
   h4 {
     margin: 0 0 0.5rem;
     font-size: 1.1rem;
-    color: #333;
+    color: var(--text-primary);
   }
 
   .tasks-hint {
     font-size: 0.85rem;
-    color: #888;
+    color: var(--text-secondary);
     margin: 0 0 1rem;
   }
 
   .no-tasks {
-    color: #888;
+    color: var(--text-secondary);
     font-style: italic;
     text-align: center;
     padding: 1rem;
@@ -112,56 +121,70 @@
   display: flex;
   gap: 0.75rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
 
   input[type="text"],
   textarea {
     flex: 1;
+    min-width: 150px;
     padding: 0.75rem;
-    border: 1.5px solid #eee;
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 0.95rem;
     font-family: inherit;
+    background: var(--input-bg);
+    color: var(--text-primary);
 
     &:focus {
       outline: none;
       border-color: #1a73e8;
     }
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
   }
 
-  .hidden-date-input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-  }
-
-  .btn-date-picker {
+  .date-input-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0.75rem;
-    background: #f8f9fa;
-    color: #666;
-    border: 1.5px solid #eee;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
 
-    .material-symbols-outlined {
+    .date-icon {
+      position: absolute;
+      left: 0.75rem;
       font-size: 1.25rem;
+      color: var(--text-secondary);
+      pointer-events: none;
+      z-index: 1;
     }
 
-    &:hover {
-      background: #e8f0fe;
-      border-color: #1a73e8;
-      color: #1a73e8;
-    }
+    .date-input {
+      padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      min-width: 140px;
+      cursor: pointer;
 
-    &.active {
-      background: #e8f0fe;
-      border-color: #1a73e8;
-      color: #1a73e8;
+      &:focus {
+        outline: none;
+        border-color: #1a73e8;
+      }
+
+      // Estilizar el picker en navegadores WebKit
+      &::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        opacity: 0.6;
+        filter: var(--date-picker-filter, none);
+        
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
   }
 
@@ -170,7 +193,7 @@
     align-items: center;
     gap: 0.375rem;
     padding: 0.75rem 1rem;
-    background: #e8f0fe;
+    background: rgba(26, 115, 232, 0.1);
     color: #1a73e8;
     border: none;
     border-radius: 10px;
@@ -185,8 +208,18 @@
     }
 
     &:hover {
-      background: #d2e3fc;
+      background: rgba(26, 115, 232, 0.2);
     }
+  }
+}
+
+[data-theme="dark"] .add-task-row {
+  .date-input-wrapper .date-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+  
+  .btn-add-task {
+    color: #64b5f6;
   }
 }
 
@@ -200,13 +233,13 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem;
-    background: #f8f9fa;
+    background: var(--bg-secondary);
     border-radius: 8px;
     margin-bottom: 0.5rem;
 
     .task-icon {
       font-size: 1.25rem;
-      color: #9aa0a6;
+      color: var(--text-secondary);
     }
 
     .task-info {
@@ -218,12 +251,12 @@
 
     .task-text {
       font-size: 0.95rem;
-      color: #333;
+      color: var(--text-primary);
     }
 
     .task-date {
       font-size: 0.8rem;
-      color: #666;
+      color: var(--text-secondary);
       font-style: italic;
     }
 
@@ -237,7 +270,7 @@
 
       .material-symbols-outlined {
         font-size: 1.125rem;
-        color: #999;
+        color: var(--text-secondary);
       }
 
       &:hover {
@@ -261,7 +294,7 @@
 
     &.completed .task-description {
       text-decoration: line-through;
-      color: #9aa0a6;
+      color: var(--text-secondary);
     }
   }
 
@@ -270,13 +303,13 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem;
-    background: #f8f9fa;
+    background: var(--bg-secondary);
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
 
     &:hover:not(.disabled) {
-      background: #f0f0f0;
+      background: var(--toggle-hover);
     }
 
     &.disabled {
@@ -304,12 +337,12 @@
 
     .task-description {
       font-size: 0.95rem;
-      color: #333;
+      color: var(--text-primary);
     }
 
     .task-date {
       font-size: 0.8rem;
-      color: #666;
+      color: var(--text-secondary);
       font-style: italic;
 
       &.overdue {
@@ -329,21 +362,27 @@
   label {
     font-size: 0.95rem;
     font-weight: 500;
-    color: #444;
+    color: var(--text-primary);
   }
 
   input, textarea {
     padding: 0.75rem;
-    border: 1.5px solid #eee;
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 1rem;
     font-family: inherit;
     transition: border-color 0.2s;
+    background: var(--input-bg);
+    color: var(--text-primary);
 
     &:focus {
       outline: none;
       border-color: #1a73e8;
       box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15);
+    }
+
+    &::placeholder {
+      color: var(--text-secondary);
     }
   }
 
@@ -378,8 +417,8 @@
     }
 
     &.selected {
-      border-color: #333;
-      box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
+      border-color: var(--text-primary);
+      box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px currentColor;
       transform: scale(1.1);
     }
   }
@@ -402,14 +441,14 @@
   }
 
   .btn-secondary {
-    background: #f8f9fa;
-    color: #666;
-    &:hover { background: #eef0f1; }
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-color);
+    &:hover { background: var(--toggle-hover); }
   }
 
   .btn-primary {
-    background: #1a73e8;
-    color: white;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-color);
     display: flex;
     align-items: center;
     gap: 0.375rem;
@@ -419,7 +458,7 @@
     }
 
     &:hover:not(:disabled) { background: #1557b0; }
-    &:disabled { background: #ccc; cursor: not-allowed; }
+    &:disabled { background: var(--toggle-bg); color: var(--text-secondary); cursor: not-allowed; }
   }
 
   &.view-footer {
@@ -437,8 +476,8 @@
   }
 
   .btn-complete-resolution {
-    background: #e8f5e9;
-    color: #2e7d32;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
     display: flex;
     align-items: center;
     gap: 0.375rem;
@@ -448,12 +487,12 @@
     }
 
     &:hover:not(.disabled) {
-      background: #c8e6c9;
+      background: rgba(34, 197, 94, 0.2);
     }
 
     &.disabled {
-      background: #f5f5f5;
-      color: #9e9e9e;
+      background: var(--toggle-bg);
+      color: var(--text-secondary);
       cursor: not-allowed;
     }
   }
@@ -480,7 +519,7 @@
 
       .material-symbols-outlined {
         font-size: 1.125rem;
-        color: #999;
+        color: var(--text-secondary);
       }
 
       &:hover {
