@@ -1,4 +1,4 @@
-<section class="tasks-container">
+<section class="tasks-container" [class.calendar-mode]="viewMode() === 'calendar'">
   <div class="tasks-header">
     <h2>{{ 'tasks.title' | transloco }}</h2>
     <button class="btn-toggle-view" (click)="toggleView()" [title]="viewMode() === 'list' ? ('tasks.calendarView' | transloco) : ('tasks.listView' | transloco)">

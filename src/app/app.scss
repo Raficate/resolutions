@@ -9,4 +9,6 @@
   overflow-y: auto;
   background-color: var(--bg-primary);
   transition: background-color 0.3s;
+  display: flex;
+  flex-direction: column;
 }

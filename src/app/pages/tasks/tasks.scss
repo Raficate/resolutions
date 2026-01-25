@@ -1,7 +1,11 @@
 .tasks-container {
   padding: 2rem;
-  max-width: 1000px;
+  max-width: 800px;
   margin: 0 auto;
+
+  &.calendar-mode {
+    max-width: 1100px;
+  }
 }
 
 .tasks-header {
@@ -298,12 +302,13 @@
 }
 
 .calendar-day {
-  min-height: 100px;
+  aspect-ratio: 1;
   padding: 0.5rem;
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   transition: background-color 0.2s;
+  overflow: hidden;
 
   &.other-month {
     background: var(--bg-secondary);
@@ -347,7 +352,8 @@
   flex-direction: column;
   gap: 0.25rem;
   overflow-y: auto;
-  max-height: 70px;
+  flex: 1;
+  max-height: calc(100% - 30px);
 }
 
 .day-task {
@@ -405,19 +411,19 @@
 @media (max-width: 768px) {
   .tasks-container {
     padding: 1rem;
+
+    &.calendar-mode {
+      max-width: 100%;
+    }
   }
 
   .calendar-day {
-    min-height: 80px;
     padding: 0.25rem;
   }
 
   .day-number {
-    font-size: 0.8rem;
-  }
-
-  .day-tasks {
-    max-height: 50px;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
   .day-task {
@@ -425,16 +431,26 @@
   }
 
   .task-text {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
+  }
+
+  .task-dot {
+    width: 6px;
+    height: 6px;
   }
 
   .calendar-weekdays .weekday {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     padding: 0.5rem 0.25rem;
   }
 
   .current-month {
-    font-size: 1rem;
-    min-width: 140px;
+    font-size: 0.95rem;
+    min-width: 130px;
+  }
+
+  .btn-today {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
   }
 }

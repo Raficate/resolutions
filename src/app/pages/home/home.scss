@@ -252,7 +252,7 @@
 
 .fab-button {
   position: fixed;
-  bottom: 7rem; // Por encima del banner de publicidad
+  bottom: 2rem;
   right: 2rem;
   width: 84px;
   height: 84px;
@@ -266,7 +266,7 @@
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(232, 133, 40, 0.3);
   transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
-  z-index: 1000; // Por encima del banner
+  z-index: 100;
 
   &:hover {
     background-color: #d4751e;
