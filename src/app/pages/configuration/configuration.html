@@ -63,4 +63,33 @@
       </div>
     </div>
   </div>
+
+  @if (showLoadTasksSection()) {
+    <div class="settings-section">
+      <h3>{{ 'settings.data' | transloco }}</h3>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="material-symbols-outlined">upload_file</span>
+          <div class="setting-text">
+            <label>{{ 'settings.loadTasks' | transloco }}</label>
+            <small>{{ 'settings.loadTasksDescription' | transloco }}</small>
+          </div>
+        </div>
+        <div class="setting-control">
+          <button
+            type="button"
+            class="btn-load-tasks"
+            [disabled]="loadingTasks()"
+            (click)="loadTasksFromJson()">
+            @if (loadingTasks()) {
+              {{ 'settings.loadTasksLoading' | transloco }}
+            } @else {
+              {{ 'settings.loadTasks' | transloco }}
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </section>

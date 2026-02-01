@@ -2,6 +2,24 @@
   <img src="mountain.png" alt="Logo" class="header-logo">
   <h1>{{ 'header.title' | transloco }}</h1>
 
+  @if (user$ | async; as user) {
+    <div class="header-search">
+      <span class="material-symbols-outlined search-icon">search</span>
+      <input
+        type="search"
+        class="search-input"
+        [value]="searchService.searchTerm()"
+        (input)="onSearchInput($event)"
+        [placeholder]="'header.searchPlaceholder' | transloco"
+        [attr.aria-label]="'header.searchPlaceholder' | transloco">
+      @if (searchService.searchTerm()) {
+        <button type="button" class="search-clear" (click)="clearSearch()" [attr.aria-label]="'header.clearSearch' | transloco">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      }
+    </div>
+  }
+
   <div class="auth-section">
     @if (user$ | async; as user) {
       <div class="user-menu-container">

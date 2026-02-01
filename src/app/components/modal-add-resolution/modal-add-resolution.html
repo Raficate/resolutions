@@ -15,7 +15,7 @@
       <!-- Modo Vista -->
       <div class="view-content">
         @if (resolution.description) {
-          <p class="view-description">{{ resolution.description }}</p>
+          <p class="view-description" [innerHTML]="resolution.description | newlineToBr"></p>
         }
         
         <div class="view-meta">

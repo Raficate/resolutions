@@ -52,12 +52,13 @@
   color: #64b5f6;
 }
 
-// Modo Vista
+// Modo Vista: respetar saltos de línea de la descripción
 .view-content {
-  .view-description {
+  p.view-description {
     color: var(--text-secondary);
     margin-bottom: 1rem;
     line-height: 1.5;
+    white-space: pre-line;
   }
 
   .view-meta {

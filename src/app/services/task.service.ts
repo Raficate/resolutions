@@ -58,24 +58,93 @@ export class TaskService {
     if (!isPlatformBrowser(this.platformId)) return;
     if (tasks.length === 0) return;
 
-    const batch = writeBatch(this.firestore);
+    const BATCH_SIZE = 500;
     const tasksRef = collection(this.firestore, this.collectionName);
 
-    for (const task of tasks) {
-      const docRef = doc(tasksRef);
-      const taskData: any = {
-        resolutionId,
-        description: task.description,
-        completed: false,
-        createdAt: Timestamp.now()
-      };
-      if (task.dueDate) {
-        taskData.dueDate = task.dueDate;
+    for (let i = 0; i < tasks.length; i += BATCH_SIZE) {
+      const batch = writeBatch(this.firestore);
+      const chunk = tasks.slice(i, i + BATCH_SIZE);
+
+      for (const task of chunk) {
+        const docRef = doc(tasksRef);
+        const taskData: Record<string, unknown> = {
+          resolutionId,
+          description: task.description ?? '',
+          completed: false,
+          createdAt: Timestamp.now()
+        };
+        if (task.dueDate) {
+          taskData['dueDate'] = task.dueDate;
+        }
+        batch.set(docRef, taskData);
       }
-      batch.set(docRef, taskData);
+
+      await batch.commit();
+    }
+  }
+
+  /**
+   * Carga tareas masivamente desde un array (p. ej. leído de assets/carga/tareas.json).
+   * Cada tarea puede tener resolutionId, description, dueDate, completed, createdAt (ISO string).
+   */
+  async loadTasksFromJsonFile(
+    tasks: Array<{
+      resolutionId: string;
+      description?: string;
+      dueDate?: string;
+      completed?: boolean;
+      createdAt?: string;
+    }>
+  ): Promise<{ success: boolean; count: number; error?: string }> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return { success: false, count: 0, error: 'No disponible en servidor' };
+    }
+    if (!tasks || tasks.length === 0) {
+      return { success: false, count: 0, error: 'El array de tareas está vacío' };
     }
 
-    await batch.commit();
+    const invalid = tasks.filter(t => !t.resolutionId || typeof t.resolutionId !== 'string');
+    if (invalid.length > 0) {
+      return { success: false, count: 0, error: 'Algunas tareas no tienen resolutionId válido' };
+    }
+
+    const BATCH_SIZE = 500;
+    const tasksRef = collection(this.firestore, this.collectionName);
+
+    for (let i = 0; i < tasks.length; i += BATCH_SIZE) {
+      const batch = writeBatch(this.firestore);
+      const chunk = tasks.slice(i, i + BATCH_SIZE);
+
+      for (const task of chunk) {
+        const docRef = doc(tasksRef);
+        let createdAt: Timestamp;
+        if (task.createdAt && task.createdAt.trim()) {
+          const date = new Date(task.createdAt);
+          if (!isNaN(date.getTime())) {
+            createdAt = Timestamp.fromDate(date);
+          } else {
+            createdAt = Timestamp.now();
+          }
+        } else {
+          createdAt = Timestamp.now();
+        }
+
+        const taskData: Record<string, unknown> = {
+          resolutionId: task.resolutionId,
+          description: task.description ?? '',
+          completed: task.completed ?? false,
+          createdAt
+        };
+        if (task.dueDate != null && task.dueDate !== '') {
+          taskData['dueDate'] = task.dueDate;
+        }
+        batch.set(docRef, taskData);
+      }
+
+      await batch.commit();
+    }
+
+    return { success: true, count: tasks.length };
   }
 
   async toggleTaskCompleted(taskId: string, completed: boolean): Promise<void> {

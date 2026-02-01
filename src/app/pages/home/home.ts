@@ -1,5 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { combineLatest, map, of, switchMap, catchError, startWith } from 'rxjs';
 import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Timestamp } from '@angular/fire/firestore';
@@ -8,6 +9,7 @@ import { ModalAddResolution, ResolutionFormData, ResolutionUpdateData } from '..
 import { ResolutionService, Resolution, ResolutionWithProgress } from '../../services/resolution.service';
 import { TaskService } from '../../services/task.service';
 import { AuthService } from '../../services/auth.service';
+import { ResolutionSearchService } from '../../services/resolution-search.service';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +22,7 @@ export class Home {
   private resolutionService = inject(ResolutionService);
   private taskService = inject(TaskService);
   private authService = inject(AuthService);
+  private searchService = inject(ResolutionSearchService);
 
   showModal = signal(false);
   viewMode = signal(false);
@@ -27,8 +30,10 @@ export class Home {
 
   user$ = this.authService.user$;
 
+  private searchTerm$ = toObservable(this.searchService.searchTerm);
+
   // Combinar resoluciones con el progreso de tareas
-  resolutionsWithProgress$ = this.resolutionService.getResolutions$().pipe(
+  private resolutionsWithProgressRaw$ = this.resolutionService.getResolutions$().pipe(
     switchMap(resolutions => {
       if (resolutions.length === 0) {
         return of([]);
@@ -54,6 +59,22 @@ export class Home {
     catchError(error => {
       console.error('Error cargando resoluciones:', error);
       return of([]);
+    })
+  );
+
+  /** Propósitos filtrados por nombre o descripción. Usado en la plantilla. */
+  public resolutionsWithProgress$ = combineLatest([
+    this.resolutionsWithProgressRaw$,
+    this.searchTerm$
+  ]).pipe(
+    map(([resolutions, term]) => {
+      if (!term) return resolutions;
+      const lower = term.toLowerCase();
+      return resolutions.filter(
+        r =>
+          (r.name || '').toLowerCase().includes(lower) ||
+          (r.description || '').toLowerCase().includes(lower)
+      );
     })
   );
 

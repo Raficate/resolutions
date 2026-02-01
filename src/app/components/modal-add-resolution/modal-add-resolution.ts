@@ -2,6 +2,7 @@ import { Component, output, input, signal, inject, OnInit, viewChild, ElementRef
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
+import { NewlineToBrPipe } from '../../pipes/newline-to-br.pipe';
 import { Resolution, Task } from '../../services/resolution.service';
 import { TaskService } from '../../services/task.service';
 import { Observable, of } from 'rxjs';
@@ -34,7 +35,7 @@ export interface ResolutionUpdateData {
 @Component({
   selector: 'app-modal-add-resolution',
   standalone: true,
-  imports: [FormsModule, AsyncPipe, DatePipe, TranslocoModule],
+  imports: [FormsModule, AsyncPipe, DatePipe, TranslocoModule, NewlineToBrPipe],
   templateUrl: './modal-add-resolution.html',
   styleUrl: './modal-add-resolution.scss',
 })
@@ -65,6 +66,10 @@ export class ModalAddResolution implements OnInit {
     '#00acc1', // Cian
     '#e91e63', // Rosa
     '#ff5722', // Naranja
+    '#009688', // Turquesa
+    '#3f51b5', // Índigo
+    '#8bc34a', // Verde lima
+    '#795548', // Marrón
   ];
 
   resolution = {

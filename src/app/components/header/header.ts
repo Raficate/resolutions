@@ -2,6 +2,7 @@ import { Component, inject, signal, HostListener } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService } from '../../services/auth.service';
+import { ResolutionSearchService } from '../../services/resolution-search.service';
 
 @Component({
   selector: 'app-header',
@@ -11,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class Header {
   private authService = inject(AuthService);
+  searchService = inject(ResolutionSearchService);
 
   user$ = this.authService.user$;
   menuOpen = signal(false);
@@ -34,5 +36,14 @@ export class Header {
   logout() {
     this.menuOpen.set(false);
     this.authService.logout();
+  }
+
+  onSearchInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchService.setSearchTerm(value);
+  }
+
+  clearSearch() {
+    this.searchService.clearSearch();
   }
 }

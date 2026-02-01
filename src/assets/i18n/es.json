@@ -3,7 +3,9 @@
     "title": "Mis propósitos de año nuevo",
     "logout": "Cerrar sesión",
     "login": "Iniciar sesión",
-    "language": "Idioma"
+    "language": "Idioma",
+    "searchPlaceholder": "Buscar por nombre o descripción…",
+    "clearSearch": "Limpiar búsqueda"
   },
   "sidebar": {
     "home": "Principal",
@@ -20,7 +22,13 @@
     "themeDescription": "Selecciona el tema de la aplicación",
     "themeLight": "Claro",
     "themeDark": "Oscuro",
-    "themeSystem": "Sistema"
+    "themeSystem": "Sistema",
+    "data": "Datos",
+    "loadTasks": "Cargar tareas desde JSON",
+    "loadTasksDescription": "Importa las tareas definidas en assets/carga/tareas.json a Firestore.",
+    "loadTasksLoading": "Cargando…",
+    "loadTasksSuccess": "Se han cargado {{count}} tareas correctamente.",
+    "loadTasksError": "Error al cargar: {{error}}"
   },
   "home": {
     "empty": "Aquí comenzaremos a listar tus propósitos de año nuevo.",

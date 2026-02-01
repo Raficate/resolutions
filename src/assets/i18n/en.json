@@ -3,7 +3,9 @@
     "title": "My year resolutions",
     "logout": "Log out",
     "login": "Sign in",
-    "language": "Language"
+    "language": "Language",
+    "searchPlaceholder": "Search by name or description…",
+    "clearSearch": "Clear search"
   },
   "sidebar": {
     "home": "Home",
@@ -20,7 +22,13 @@
     "themeDescription": "Select the application theme",
     "themeLight": "Light",
     "themeDark": "Dark",
-    "themeSystem": "System"
+    "themeSystem": "System",
+    "data": "Data",
+    "loadTasks": "Load tasks from JSON",
+    "loadTasksDescription": "Import tasks from assets/carga/tareas.json into Firestore.",
+    "loadTasksLoading": "Loading…",
+    "loadTasksSuccess": "{{count}} tasks loaded successfully.",
+    "loadTasksError": "Load error: {{error}}"
   },
   "home": {
     "empty": "Here we will start listing your new year resolutions.",
